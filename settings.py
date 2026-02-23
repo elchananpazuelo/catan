@@ -7,7 +7,7 @@ WINDOW_SIZE = (16 * TILE_SIZE, 9 * TILE_SIZE)
 BLACK = (0, 0, 0)
 GRAY = (150, 150, 150)
 DARK_BG = (20, 20, 20)
-FONT_SIZE = 25
+FONT_SIZE = 23
 FPS = 60
 
 CLICK_SOUND = "sounds/click.wav"

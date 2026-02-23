@@ -5,8 +5,15 @@ import classes
 pygame.init()
 screen = pygame.display.set_mode(settings.WINDOW_SIZE)
 clock = pygame.time.Clock()
+player = classes.Player()
 
-balance = 20
+TILE_TO_RESOURCE = {
+    "05": "wood",
+    "06": "brick",
+    "07": "iron",
+    "08": "wheat"
+}
+
 # יצירת המטריצה של הטבלה 
 with open('map.txt', 'r', encoding='utf-8') as file:
     grid = file.read()
@@ -32,7 +39,6 @@ scaled_cache = {} # כאן נשמור את התמונות אחרי ה-Scale
 border = pygame.image.load("images/border.png").convert_alpha()
 scaled_border = border
 font = pygame.font.Font("fonts/Minecraft.ttf", settings.FONT_SIZE)
-# balance_rect = balance_surface.get_rect(center=(50,300))
 click_sound = pygame.mixer.Sound(settings.CLICK_SOUND)
 
 # משתני מצלמה
@@ -48,11 +54,16 @@ def clamp_camera():
     offset_x = min(0, max(offset_x, (settings.WINDOW_SIZE[0] / zoom) - world_w))
     offset_y = min(0, max(offset_y, (settings.WINDOW_SIZE[1] / zoom) - world_h))
 
-def ChangeGrid(row, col):
-    global balance
-    
+def ChangeGrid(row, col):    
+    resource_type = grid[row][col]
+    if resource_type in TILE_TO_RESOURCE:
+        resource_name = TILE_TO_RESOURCE[resource_type]
+        print(resource_name)
+        player.add_resource(resource_name)
+        print(player.resources)
+        
+
     if grid[row][col] == "01":
-        balance += 1
         grid[row][col] = "04"
         try:
             if grid[row + 1][col] == "00":
@@ -76,7 +87,6 @@ def ChangeGrid(row, col):
 counter = 0
 running = True
 while running:
-    balance_surface = font.render(f"{balance}", True, (255, 255, 255))
     screen.fill(settings.DARK_BG)
     mx, my = pygame.mouse.get_pos()
     
@@ -151,7 +161,11 @@ while running:
             # ריבוע ריחוף
             if row == hover_row and col == hover_col:
                 screen.blit(scaled_border, (rx, ry))
-    screen.blit(balance_surface, (25,380))
+    y_offset = 305
+    for resource, amount in player.resources.items():
+        text_surface = font.render(f"{resource}: {amount}", True, (255,255,255))
+        screen.blit(text_surface, (25, y_offset))
+        y_offset += 30
     pygame.display.flip()
     clock.tick(settings.FPS)
 

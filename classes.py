@@ -7,6 +7,28 @@ class Block:
 
 class Player:
     def __init__(self, XP=1.0):
+        self.resources = {
+            "wood": 0,
+            "brick": 0,
+            "iron": 0,
+            "wheat": 0
+        }
+        
         self.XP = XP
+    
+    def add_resource(self, resource_type, amount=1):
+        if resource_type in self.resources:
+            self.resources[resource_type] += amount
 
+    def can_afford(self, cost_dict):
+        for res, amount in cost_dict.items():
+            if self.resources[res] < amount:
+                return False
+        return True
 
+    def spend_resources(self, cost_dict):
+        if self.can_afford(cost_dict):
+            for res, amount in cost_dict.items():
+                self.resources[res] -= amount
+            return True
+        return False
