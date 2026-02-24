@@ -33,3 +33,12 @@ class Player:
                 self.resources[res] -= amount
             return True
         return False
+    
+    def convert_to_xp(self,xp_map,resource_type,amount):
+        if self.resources[resource_type] < amount:
+            return 
+        else:
+            self.XP += xp_map[resource_type] * amount
+            self.resources[resource_type] -= amount
+    
+        

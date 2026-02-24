@@ -12,8 +12,17 @@ TILE_TO_RESOURCE = {
     "05": "wood",
     "06": "brick",
     "07": "iron",
-    "08": "wheat",
+    "08": "wheat"
 }
+
+XP_MAP = {
+    "wool": 0.2,
+    "wood":0.2,
+    "brick":0.2,
+    "iron":0.2,
+    "wheat":0.2
+}
+
 
 # יצירת המטריצה של הטבלה 
 with open('map.txt', 'r', encoding='utf-8') as file:
