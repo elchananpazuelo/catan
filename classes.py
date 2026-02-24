@@ -8,6 +8,7 @@ class Block:
 class Player:
     def __init__(self, XP=1.0):
         self.resources = {
+            "wool": 0,
             "wood": 0,
             "brick": 0,
             "iron": 0,

@@ -8,10 +8,11 @@ clock = pygame.time.Clock()
 player = classes.Player()
 
 TILE_TO_RESOURCE = {
+    "04": "wool",
     "05": "wood",
     "06": "brick",
     "07": "iron",
-    "08": "wheat"
+    "08": "wheat",
 }
 
 # יצירת המטריצה של הטבלה 
@@ -161,7 +162,7 @@ while running:
             # ריבוע ריחוף
             if row == hover_row and col == hover_col:
                 screen.blit(scaled_border, (rx, ry))
-    y_offset = 305
+    y_offset = 270
     for resource, amount in player.resources.items():
         text_surface = font.render(f"{resource}: {amount}", True, (255,255,255))
         screen.blit(text_surface, (25, y_offset))
