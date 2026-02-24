@@ -1,11 +1,53 @@
 import pygame
 import settings
 import classes
+import json
+import os
 
 pygame.init()
 screen = pygame.display.set_mode(settings.WINDOW_SIZE)
 clock = pygame.time.Clock()
+
+def save_game():
+    game_state = {
+        "grid": grid,
+        "resources": player.resources,
+        "XP": player.XP
+    }
+    
+    with open("save.json", "w", encoding="utf-8") as f:
+        json.dump(game_state,f,indent=4)
+    
+    print("Game saved")
+
+
+def load_game():
+    global grid
+    
+    if os.path.exists("save.json"):
+        with open("save.json","r",encoding="utf-8") as f:
+            game_state = json.load(f)
+        
+        grid = game_state["grid"]
+        player.resources = game_state["resources"]
+        player.XP = game_state["XP"]
+        
+        print("Game loaded")
+        
+        return True
+    else:
+        return False
+    
 player = classes.Player()
+if(not load_game()):
+    with open('map.txt', 'r', encoding='utf-8') as file:
+        grid = file.read()
+        grid = grid.split("\n")
+        for block in grid:
+            grid[grid.index(block)] = block.split(" ")
+else:
+    load_game()
+
 
 TILE_TO_RESOURCE = {
     "04": "wool",
@@ -22,14 +64,6 @@ XP_MAP = {
     "iron":0.2,
     "wheat":0.2
 }
-
-
-# יצירת המטריצה של הטבלה 
-with open('map.txt', 'r', encoding='utf-8') as file:
-    grid = file.read()
-    grid = grid.split("\n")
-    for block in grid:
-        grid[grid.index(block)] = block.split(" ")
 
 # טעינת תמונות
 tile_images = {
@@ -103,6 +137,7 @@ while running:
     # אירועים
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            save_game()
             running = False
         
         if event.type == pygame.MOUSEWHEEL:
