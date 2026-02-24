@@ -7,6 +7,7 @@ import os
 pygame.init()
 screen = pygame.display.set_mode(settings.WINDOW_SIZE)
 clock = pygame.time.Clock()
+floating_texts = []
 
 def save_game():
     game_state = {
@@ -78,11 +79,13 @@ tile_images = {
     "08": [pygame.image.load("images/wheat.png").convert_alpha(), "wheat"] 
 }
 
+
 # --- מערכת CACHE לאופטימיזציה ---
 scaled_cache = {} # כאן נשמור את התמונות אחרי ה-Scale
 border = pygame.image.load("images/border.png").convert_alpha()
 scaled_border = border
 font = pygame.font.Font("fonts/Minecraft.ttf", settings.FONT_SIZE)
+popup_font = pygame.font.Font("fonts/Minecraft.ttf", 14) 
 click_sound = pygame.mixer.Sound(settings.CLICK_SOUND)
 
 # משתני מצלמה
@@ -105,7 +108,13 @@ def ChangeGrid(row, col):
         print(resource_name)
         player.add_resource(resource_name)
         print(player.resources)
-        
+        floating_texts.append({
+            "text": f"+1 {resource_name}",
+            "row": row,
+            "col": col,
+            "timer": 60
+        })
+                
     
     if grid[row][col] == "01":
         grid[row][col] = "04"
@@ -213,6 +222,23 @@ while running:
         y_offset += 30
     text_xp = font.render(f"XP: {player.XP}", True, (255,255,255))
     screen.blit(text_xp,(25,y_offset))
+    
+    for popup in floating_texts[:]:
+        screen_x = (popup["col"] * settings.TILE_SIZE + offset_x) * zoom
+        screen_y = (popup["row"] * settings.TILE_SIZE + offset_y) * zoom - (60 - popup["timer"])
+        
+        text_surface = popup_font.render(popup["text"], True, (255,255,255))
+        alpha = int(255 * (popup["timer"] / 60))  
+        text_surface.set_alpha(alpha)
+        screen.blit(text_surface, (screen_x, screen_y))
+        
+        
+        popup["timer"] -= 1
+        
+        if popup["timer"] <= 0:
+            floating_texts.remove(popup)
+
+            
     pygame.display.flip()
     clock.tick(settings.FPS)
 
