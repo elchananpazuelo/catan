@@ -614,11 +614,11 @@
         ]
     ],
     "resources": {
-        "wool": 13,
-        "wood": 3,
+        "wool": 16,
+        "wood": 5,
         "brick": 6,
-        "iron": 3,
-        "wheat": 4
+        "iron": 5,
+        "wheat": 7
     },
     "XP": 1.0
 }

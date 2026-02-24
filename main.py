@@ -106,7 +106,7 @@ def ChangeGrid(row, col):
         player.add_resource(resource_name)
         print(player.resources)
         
-
+    
     if grid[row][col] == "01":
         grid[row][col] = "04"
         try:
@@ -206,11 +206,13 @@ while running:
             # ריבוע ריחוף
             if row == hover_row and col == hover_col:
                 screen.blit(scaled_border, (rx, ry))
-    y_offset = 270
+    y_offset = 250
     for resource, amount in player.resources.items():
         text_surface = font.render(f"{resource}: {amount}", True, (255,255,255))
         screen.blit(text_surface, (25, y_offset))
         y_offset += 30
+    text_xp = font.render(f"XP: {player.XP}", True, (255,255,255))
+    screen.blit(text_xp,(25,y_offset))
     pygame.display.flip()
     clock.tick(settings.FPS)
 
