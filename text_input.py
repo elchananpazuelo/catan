@@ -35,7 +35,8 @@ class TextInput:
                     self.color = self.color_inactive
             
             elif event.type == pygame.TEXTINPUT:
-                self.text += event.text
+                if event.text.isdigit():
+                    self.text += event.text
 
     def update(self):
         """מעדכן את רוחב התיבה אם הטקסט ארוך מדי (אופציונלי)"""
