@@ -84,6 +84,7 @@ tile_images = {
 scaled_cache = {} # כאן נשמור את התמונות אחרי ה-Scale
 border = pygame.image.load("images/border.png").convert_alpha()
 scaled_border = border
+xp_convert_icon = pygame.image.load("images/xp_convert.png").convert_alpha()
 font = pygame.font.Font("fonts/Minecraft.ttf", settings.FONT_SIZE)
 click_sound = pygame.mixer.Sound(settings.CLICK_SOUND)
 
@@ -114,7 +115,6 @@ def ChangeGrid(row, col):
             "timer": 80
         })
                 
-    
     if grid[row][col] == "01":
         grid[row][col] = "04"
         try:
@@ -136,6 +136,11 @@ def ChangeGrid(row, col):
     if grid[row][col] != "00":
         click_sound.play()
 
+def open_xp_convert_menu():
+    global xp_menu_opened
+    xp_menu_opened = not xp_menu_opened
+
+xp_menu_opened = False
 counter = 0
 running = True
 while running:
@@ -166,8 +171,11 @@ while running:
             dragging = True
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             if counter <= 2:
-                ChangeGrid(hover_row, hover_col)
-                print(settings.FONT_SIZE)
+                if 700<mx<748 and 364<my<412:
+                    open_xp_convert_menu()
+                else:
+                    ChangeGrid(hover_row, hover_col)
+                # print(settings.FONT_SIZE)
             counter = 0
             dragging = False
         if event.type == pygame.MOUSEMOTION and dragging:
@@ -177,12 +185,6 @@ while running:
                 offset_x += dx / zoom
                 offset_y += dy / zoom
                 clamp_camera()
-
-    ####### מהלך המשחק #######
-    
-    
-
-    #######-------------#######
     
     # חישוב משבצת ריחוף
     world_mx = (mx / zoom) - offset_x
@@ -211,9 +213,12 @@ while running:
             if tile_type in scaled_cache:
                 screen.blit(scaled_cache[tile_type], (rx, ry))
             
+            screen.blit(xp_convert_icon, (700, 364))
+            
             # ריבוע ריחוף
-            if row == hover_row and col == hover_col:
+            if row == hover_row and col == hover_col and not (700<mx<748 and 364<my<412) :
                 screen.blit(scaled_border, (rx, ry))
+    
     text_offset = 250
     for resource, amount in player.resources.items():
         text_surface = font.render(f"{resource}: {amount}", True, (255,255,255))
