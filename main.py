@@ -85,7 +85,6 @@ scaled_cache = {} # כאן נשמור את התמונות אחרי ה-Scale
 border = pygame.image.load("images/border.png").convert_alpha()
 scaled_border = border
 font = pygame.font.Font("fonts/Minecraft.ttf", settings.FONT_SIZE)
-popup_font = pygame.font.Font("fonts/Minecraft.ttf", 14) 
 click_sound = pygame.mixer.Sound(settings.CLICK_SOUND)
 
 # משתני מצלמה
@@ -224,6 +223,7 @@ while running:
     screen.blit(text_xp,(25,y_offset))
     
     for popup in floating_texts[:]:
+        popup_font = pygame.font.Font("fonts/Minecraft.ttf", int(zoom * 12)) 
         screen_x = (popup["col"] * settings.TILE_SIZE + offset_x) * zoom
         screen_y = (popup["row"] * settings.TILE_SIZE + offset_y) * zoom - (60 - popup["timer"])
         
@@ -238,6 +238,7 @@ while running:
         if popup["timer"] <= 0:
             floating_texts.remove(popup)
 
+        del popup_font
             
     pygame.display.flip()
     clock.tick(settings.FPS)
