@@ -111,7 +111,7 @@ def ChangeGrid(row, col):
             "text": f"+1 {resource_name}",
             "row": row,
             "col": col,
-            "timer": 60
+            "timer": 80
         })
                 
     
@@ -225,10 +225,11 @@ while running:
     for popup in floating_texts[:]:
         popup_font = pygame.font.Font("fonts/Minecraft.ttf", int(zoom * 12)) 
         screen_x = (popup["col"] * settings.TILE_SIZE + offset_x) * zoom
-        screen_y = (popup["row"] * settings.TILE_SIZE + offset_y) * zoom - (60 - popup["timer"])
+        screen_y = (popup["row"] * settings.TILE_SIZE + offset_y) * zoom - (80 - popup["timer"])
         
-        text_surface = popup_font.render(popup["text"], True, (255,255,255))
-        alpha = int(255 * (popup["timer"] / 60))  
+        fade = (popup["timer"] / 80) 
+        text_surface = popup_font.render(popup["text"], True, (255*fade,255*fade,255*fade))
+        alpha = int(255 * (popup["timer"] / 80))  
         text_surface.set_alpha(alpha)
         screen.blit(text_surface, (screen_x, screen_y))
         
