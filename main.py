@@ -3,6 +3,7 @@ import settings
 import classes
 import json
 import os
+import text_input
 
 pygame.init()
 screen = pygame.display.set_mode(settings.WINDOW_SIZE)
@@ -139,6 +140,7 @@ def ChangeGrid(row, col):
 def open_xp_convert_menu():
     global xp_menu_opened
     xp_menu_opened = not xp_menu_opened
+    print(xp_menu_opened)
 
 xp_menu_opened = False
 counter = 0
@@ -227,6 +229,8 @@ while running:
     text_xp = font.render(f"XP: {player.XP}", True, (255,255,255))
     screen.blit(text_xp,(25,text_offset))
     
+    ######## xp convert menu
+
     for popup in floating_texts[:]:
         popup_font = pygame.font.Font("fonts/Minecraft.ttf", int(zoom * 12)) 
         screen_x = (popup["col"] * settings.TILE_SIZE + offset_x) * zoom
