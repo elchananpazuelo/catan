@@ -21,19 +21,12 @@ class Player:
         if resource_type in self.resources:
             self.resources[resource_type] += amount
 
-    def can_afford(self, cost_dict):
-        for res, amount in cost_dict.items():
-            if self.resources[res] < amount:
-                return False
+    def can_afford(self, cost_dict,building):
+        if self.XP < cost_dict[building]:
+            return False
+        self.XP -= cost_dict["building"]
         return True
 
-    def spend_resources(self, cost_dict):
-        if self.can_afford(cost_dict):
-            for res, amount in cost_dict.items():
-                self.resources[res] -= amount
-            return True
-        return False
-    
     def convert_to_xp(self,xp_map,resource_type,amount):
         if self.resources[resource_type] < amount:
             return 
