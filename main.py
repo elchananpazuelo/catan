@@ -214,13 +214,13 @@ while running:
             # ריבוע ריחוף
             if row == hover_row and col == hover_col:
                 screen.blit(scaled_border, (rx, ry))
-    y_offset = 250
+    text_offset = 250
     for resource, amount in player.resources.items():
         text_surface = font.render(f"{resource}: {amount}", True, (255,255,255))
-        screen.blit(text_surface, (25, y_offset))
-        y_offset += 30
+        screen.blit(text_surface, (25, text_offset))
+        text_offset += 30
     text_xp = font.render(f"XP: {player.XP}", True, (255,255,255))
-    screen.blit(text_xp,(25,y_offset))
+    screen.blit(text_xp,(25,text_offset))
     
     for popup in floating_texts[:]:
         popup_font = pygame.font.Font("fonts/Minecraft.ttf", int(zoom * 12)) 
