@@ -32,6 +32,7 @@ class Player:
             return 
         else:
             self.XP += xp_map[resource_type] * amount
+            self.XP = round(self.XP, 2)
             self.resources[resource_type] -= amount
     
         

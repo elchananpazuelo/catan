@@ -238,7 +238,7 @@ while running:
         text_surface = font.render(f"{resource}: {amount}", True, (255,255,255))
         screen.blit(text_surface, (25, text_offset))
         text_offset += 30
-    text_xp = font.render(f"XP: {player.XP}", True, (255,255,255))
+    text_xp = font.render(f"XP: {player.XP:.2f}", True, (255,255,255))
     screen.blit(text_xp,(25,text_offset))
     
     if xp_menu_opened:
