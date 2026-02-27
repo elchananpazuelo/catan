@@ -3,7 +3,7 @@ import settings
 import classes
 import json
 import os
-import text_input
+from text_input import TextInput
 
 pygame.init()
 screen = pygame.display.set_mode(settings.WINDOW_SIZE)
@@ -86,6 +86,8 @@ scaled_cache = {} # כאן נשמור את התמונות אחרי ה-Scale
 border = pygame.image.load("images/border.png").convert_alpha()
 scaled_border = border
 xp_convert_icon = pygame.image.load("images/xp_convert.png").convert_alpha()
+xp_convert_menu = pygame.image.load("images/xp_convert_menu.png")
+xp_convert_menu = pygame.transform.scale(xp_convert_menu, (748, 362))
 font = pygame.font.Font("fonts/Minecraft.ttf", settings.FONT_SIZE)
 click_sound = pygame.mixer.Sound(settings.CLICK_SOUND)
 
@@ -155,7 +157,7 @@ while running:
             save_game()
             running = False
         
-        if event.type == pygame.MOUSEWHEEL:
+        if event.type == pygame.MOUSEWHEEL and not xp_menu_opened:
             world_x_before = (mx / zoom) - offset_x
             world_y_before = (my / zoom) - offset_y
             
@@ -175,14 +177,14 @@ while running:
             if counter <= 2:
                 if 700<mx<748 and 364<my<412:
                     open_xp_convert_menu()
-                else:
+                elif not xp_menu_opened:
                     ChangeGrid(hover_row, hover_col)
                 # print(settings.FONT_SIZE)
             counter = 0
             dragging = False
         if event.type == pygame.MOUSEMOTION and dragging:
             counter+=1
-            if counter > 2:
+            if counter > 2 and not xp_menu_opened:
                 dx, dy = event.rel
                 offset_x += dx / zoom
                 offset_y += dy / zoom
@@ -229,7 +231,9 @@ while running:
     text_xp = font.render(f"XP: {player.XP}", True, (255,255,255))
     screen.blit(text_xp,(25,text_offset))
     
-    ######## xp convert menu
+    if xp_menu_opened:
+        screen.blit(xp_convert_menu, (10,35))
+        screen.blit(xp_convert_icon, (700, 364))
 
     for popup in floating_texts[:]:
         popup_font = pygame.font.Font("fonts/Minecraft.ttf", int(zoom * 12)) 
