@@ -81,11 +81,11 @@ tile_images = {
 }
 
 text_box = [
-    TextInput(53,208,90,19,14),
-    TextInput(196,208,90,19,14),
-    TextInput(339,208,90,19,14),
-    TextInput(483,208,90,19,14),
-    TextInput(626,208,90,19,14)
+    TextInput(53, 208, 90, 19, 14, box_id="07"),
+    TextInput(196, 208, 90, 19, 14, box_id="06"),
+    TextInput(339, 208, 90, 19, 14, box_id="05"),
+    TextInput(483, 208, 90, 19, 14, box_id="08"),
+    TextInput(626, 208, 90, 19, 14, box_id="04")
 ]
 
 # --- מערכת CACHE לאופטימיזציה ---
@@ -249,12 +249,17 @@ while running:
             text_surface = font.render(f"{resource}: {amount}", True, (0,0,0))
             screen.blit(text_surface, (25, text_offset))
             text_offset += 30
-        text_xp = font.render(f"XP: {player.XP}", True, (255,255,255))
+        text_xp = font.render(f"XP: {player.XP:.2f}", True, (255,255,255))
         screen.blit(text_xp,(25,text_offset))
         for box in text_box:
             box.update()
             box.draw(screen)
         
+        for box in text_box:
+            if box.was_submitted():
+                value = box.get_text()
+                print(f"User pressed Enter! Value: {value}, In box {TILE_TO_RESOURCE[box.id]}")
+                player.convert_to_xp(XP_MAP,TILE_TO_RESOURCE[box.id],int(value))
 
     for popup in floating_texts[:]:
         popup_font = pygame.font.Font("fonts/Minecraft.ttf", int(zoom * 12)) 
