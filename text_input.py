@@ -8,7 +8,7 @@ class TextInput:
         self.color_inactive = pygame.Color('gray10')
         self.color = self.color_inactive
         
-        self.font = pygame.font.Font("fonts/Minecraft.ttf", settings.FONT_SIZE)
+        self.font = pygame.font.Font("fonts/Minecraft.ttf", font_size)
         self.text = ""
         self.placeholder = placeholder
         self.active = False

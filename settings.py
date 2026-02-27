@@ -10,6 +10,14 @@ DARK_BG = (20, 20, 20)
 FONT_SIZE = 23
 FPS = 60
 
+XP_MAP = {
+    "wool": 0.2,
+    "wood":0.2,
+    "brick":0.2,
+    "iron":0.2,
+    "wheat":0.2
+}
+
 CLICK_SOUND = "sounds/click.wav"
 
 SOUNDS = tile_sounds = {

@@ -80,6 +80,13 @@ tile_images = {
     "08": [pygame.image.load("images/wheat.png").convert_alpha(), "wheat"] 
 }
 
+text_box = [
+    TextInput(53,208,90,19,14),
+    TextInput(196,208,90,19,14),
+    TextInput(339,208,90,19,14),
+    TextInput(483,208,90,19,14),
+    TextInput(626,208,90,19,14)
+]
 
 # --- מערכת CACHE לאופטימיזציה ---
 scaled_cache = {} # כאן נשמור את התמונות אחרי ה-Scale
@@ -153,6 +160,9 @@ while running:
     
     # אירועים
     for event in pygame.event.get():
+        for box in text_box:
+            box.handle_event(event)
+        
         if event.type == pygame.QUIT:
             save_game()
             running = False
@@ -234,6 +244,17 @@ while running:
     if xp_menu_opened:
         screen.blit(xp_convert_menu, (10,35))
         screen.blit(xp_convert_icon, (700, 364))
+        text_offset = 250
+        for resource, amount in player.resources.items():
+            text_surface = font.render(f"{resource}: {amount}", True, (0,0,0))
+            screen.blit(text_surface, (25, text_offset))
+            text_offset += 30
+        text_xp = font.render(f"XP: {player.XP}", True, (255,255,255))
+        screen.blit(text_xp,(25,text_offset))
+        for box in text_box:
+            box.update()
+            box.draw(screen)
+        
 
     for popup in floating_texts[:]:
         popup_font = pygame.font.Font("fonts/Minecraft.ttf", int(zoom * 12)) 
