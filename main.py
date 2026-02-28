@@ -285,6 +285,7 @@ while running:
                 value = box.get_text()
                 print(f"User pressed Enter! Value: {value}, In box {TILE_TO_RESOURCE[box.id]}")
                 player.convert_to_xp(XP_MAP,TILE_TO_RESOURCE[box.id],int(value))
+                box.set_text("")
         
         for i in minus_arr:
             screen.blit(minus_icon, i)
