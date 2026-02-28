@@ -97,6 +97,15 @@ xp_convert_menu = pygame.image.load("images/xp_convert_menu.png")
 xp_convert_menu = pygame.transform.scale(xp_convert_menu, (748, 362))
 font = pygame.font.Font("fonts/Minecraft.ttf", settings.FONT_SIZE)
 click_sound = pygame.mixer.Sound(settings.CLICK_SOUND)
+minus_icon = pygame.image.load("images/minus_icon.png")
+plus_icon = pygame.image.load("images/plus_icon.png")
+
+minus_arr, plus_arr = [], []
+x_test = 33
+for i in range(5):
+    minus_arr.append(minus_icon.get_rect(topleft=(x_test, 208)))
+    plus_arr.append(plus_icon.get_rect(topleft=(x_test + 111, 208)))
+    x_test+= 143
 
 # משתני מצלמה
 offset_x, offset_y = -384, -216
@@ -260,6 +269,11 @@ while running:
                 value = box.get_text()
                 print(f"User pressed Enter! Value: {value}, In box {TILE_TO_RESOURCE[box.id]}")
                 player.convert_to_xp(XP_MAP,TILE_TO_RESOURCE[box.id],int(value))
+        
+        for i in minus_arr:
+            screen.blit(minus_icon, i)
+        for i in plus_arr:
+            screen.blit(plus_icon, i)
 
     for popup in floating_texts[:]:
         popup_font = pygame.font.Font("fonts/Minecraft.ttf", int(zoom * 12)) 
