@@ -264,6 +264,22 @@ while running:
             box.update()
             box.draw(screen)
         
+        for i, rect in enumerate(minus_arr):
+            if rect.collidepoint(mx,my) and event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                counter += 1
+                if counter <= 1:
+                    current_val = text_box[i].get_text()
+                    new_val = max(0,int(current_val if current_val else 0) - 1)
+                    text_box[i].set_text(str(new_val))
+        
+        for i, rect in enumerate(plus_arr):
+            if rect.collidepoint(mx,my) and event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                counter += 1
+                if counter <= 1:
+                    current_val = text_box[i].get_text()
+                    new_val = int(current_val if current_val else 0) + 1
+                    text_box[i].set_text(str(new_val))
+                
         for box in text_box:
             if box.was_submitted():
                 value = box.get_text()
@@ -274,7 +290,9 @@ while running:
             screen.blit(minus_icon, i)
         for i in plus_arr:
             screen.blit(plus_icon, i)
+            
 
+                
     for popup in floating_texts[:]:
         popup_font = pygame.font.Font("fonts/Minecraft.ttf", int(zoom * 12)) 
         screen_x = (popup["col"] * settings.TILE_SIZE + offset_x) * zoom

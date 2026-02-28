@@ -47,6 +47,8 @@ class TextInput:
     def get_text(self):
         return self.text
 
+    def set_text(self,text):
+        self.text = text
     def was_submitted(self):
         """Returns True if Enter was pressed since last check"""
         if self.submitted:
