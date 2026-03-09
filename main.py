@@ -100,6 +100,11 @@ click_sound = pygame.mixer.Sound(settings.CLICK_SOUND)
 minus_icon = pygame.image.load("images/minus_icon.png")
 plus_icon = pygame.image.load("images/plus_icon.png")
 
+convert_font = pygame.font.Font("fonts/Minecraft.ttf", 47)
+convert_button = convert_font.render("convert", True, "black")
+convert_button_rect = convert_button.get_rect()
+convert_button_rect.center = (768/2, 325)
+
 minus_arr, plus_arr = [], []
 x_test = 33
 for i in range(5):
@@ -194,6 +199,8 @@ while running:
             dragging = True
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             if counter <= 2:
+                if convert_button_rect.collidepoint(event.pos):
+                    print("הטקסט נלחץ!")
                 if 700<mx<748 and 364<my<412:
                     open_xp_convert_menu()
                 elif not xp_menu_opened:
@@ -208,6 +215,8 @@ while running:
                 offset_x += dx / zoom
                 offset_y += dy / zoom
                 clamp_camera()
+        
+        
     
     # חישוב משבצת ריחוף
     world_mx = (mx / zoom) - offset_x
@@ -253,6 +262,7 @@ while running:
     if xp_menu_opened:
         screen.blit(xp_convert_menu, (10,35))
         screen.blit(xp_convert_icon, (700, 364))
+        screen.blit(convert_button, convert_button_rect)
         text_offset = 250
         for resource, amount in player.resources.items():
             text_surface = font.render(f"{resource}: {amount}", True, (0,0,0))
