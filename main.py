@@ -200,7 +200,11 @@ while running:
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             if counter <= 2:
                 if convert_button_rect.collidepoint(event.pos):
-                    print("הטקסט נלחץ!")
+                    for box in text_box:
+                        value = box.get_text()
+                        if value != "":
+                            player.convert_to_xp(XP_MAP, TILE_TO_RESOURCE[box.id], int(value))
+                            box.set_text("")
                 if 700<mx<748 and 364<my<412:
                     open_xp_convert_menu()
                 elif not xp_menu_opened:
