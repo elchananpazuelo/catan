@@ -11,6 +11,14 @@ clock = pygame.time.Clock()
 floating_texts = []
 
 def save_game():
+    """
+    Saves the current game state into a JSON file.
+
+    Saved data includes:
+    - Grid state
+    - Player resources
+    - Player XP
+    """
     game_state = {
         "grid": grid,
         "resources": player.resources,
@@ -24,6 +32,12 @@ def save_game():
 
 
 def load_game():
+    """
+    Loads game state from save.json if it exists.
+
+    Returns:
+        bool: True if save file was loaded successfully, otherwise False.
+    """
     global grid
     
     if os.path.exists("save.json"):
@@ -51,6 +65,7 @@ else:
     load_game()
 
 
+# Mapping between tile IDs and resource names
 TILE_TO_RESOURCE = {
     "04": "wool",
     "05": "wood",
@@ -59,6 +74,7 @@ TILE_TO_RESOURCE = {
     "08": "wheat"
 }
 
+# XP gained per resource converted
 XP_MAP = {
     "wool": 0.2,
     "wood":0.2,
@@ -80,6 +96,7 @@ tile_images = {
     "08": [pygame.image.load("images/wheat.png").convert_alpha(), "wheat"] 
 }
 
+# Input boxes used in XP conversion menu
 text_box = [
     TextInput(53, 208, 90, 19, 14, box_id="07"),
     TextInput(196, 208, 90, 19, 14, box_id="06"),
@@ -118,6 +135,9 @@ zoom = 1.0
 dragging = False
 
 def clamp_camera():
+    """
+    Prevents the camera from moving outside the map boundaries.
+    """
     global offset_x, offset_y
     world_w = settings.GRID_WIDTH * settings.TILE_SIZE
     world_h = settings.GRID_HEIGHT * settings.TILE_SIZE
@@ -161,6 +181,10 @@ def ChangeGrid(row, col):
         click_sound.play()
 
 def open_xp_convert_menu():
+    """
+    Opens or closes the XP conversion menu.
+    """
+    
     global xp_menu_opened
     xp_menu_opened = not xp_menu_opened
     print(xp_menu_opened)
@@ -168,11 +192,13 @@ def open_xp_convert_menu():
 xp_menu_opened = False
 counter = 0
 running = True
+
+# Main Game Loop
 while running:
     screen.fill(settings.DARK_BG)
     mx, my = pygame.mouse.get_pos()
     
-    # אירועים
+    # Event Handling
     for event in pygame.event.get():
         for box in text_box:
             box.handle_event(event)
@@ -181,6 +207,7 @@ while running:
             save_game()
             running = False
         
+        # Zoom with mouse wheel
         if event.type == pygame.MOUSEWHEEL and not xp_menu_opened:
             world_x_before = (mx / zoom) - offset_x
             world_y_before = (my / zoom) - offset_y
@@ -192,19 +219,24 @@ while running:
             offset_y = (my / zoom) - world_y_before
             clamp_camera()
             
-            # --- חשוב: כשהזום משתנה, מנקים את הזיכרון הזמני ---
+            # Clear cache when zoom changes
             scaled_cache.clear()
+            
+        # Start dragging
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-
             dragging = True
+        
+        # Stop dragging    
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             if counter <= 2:
+                # Convert resources to XP
                 if convert_button_rect.collidepoint(event.pos):
                     for box in text_box:
                         value = box.get_text()
                         if value != "":
                             player.convert_to_xp(XP_MAP, TILE_TO_RESOURCE[box.id], int(value))
                             box.set_text("")
+                # Open XP menu
                 if 700<mx<748 and 364<my<412:
                     open_xp_convert_menu()
                 elif not xp_menu_opened:
@@ -212,6 +244,8 @@ while running:
                 # print(settings.FONT_SIZE)
             counter = 0
             dragging = False
+            
+        # Camera movement while dragging
         if event.type == pygame.MOUSEMOTION and dragging:
             counter+=1
             if counter > 2 and not xp_menu_opened:
@@ -307,7 +341,7 @@ while running:
             screen.blit(plus_icon, i)
             
 
-                
+    # Floating Resource Popups
     for popup in floating_texts[:]:
         popup_font = pygame.font.Font("fonts/Minecraft.ttf", int(zoom * 12)) 
         screen_x = (popup["col"] * settings.TILE_SIZE + offset_x) * zoom
