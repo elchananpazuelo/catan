@@ -403,7 +403,7 @@ while running:
         # clamp horizontally to avoid going off the right edge
         # rx = max(0, min(rx, settings.WINDOW_SIZE[0] - (block_size + 1)))
         
-        house_img = pygame.image.load("images/house.png").convert_alpha()
+        house_img = pygame.image.load("images/blank_house.png").convert_alpha()
         
         scaled_house = pygame.transform.scale(house_img, (block_size + 1, block_size + 1))
         screen.blit(scaled_house, (rx, ry))
