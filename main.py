@@ -138,6 +138,10 @@ offset_x, offset_y = -384, -216
 zoom = 1.0
 dragging = False
 
+
+
+count_build_menu = 0
+
 def clamp_camera():
     """
     Prevents the camera from moving outside the map boundaries.
@@ -203,7 +207,7 @@ def open_build_menu(row, col):
     """
     Toggle black square on the tile at (row, col).
     """
-    global offset_x
+    global offset_x ,count_build_menu
     
     if (TILE_TO_RESOURCE[grid[row][col]] == "wool"):
         
@@ -214,11 +218,14 @@ def open_build_menu(row, col):
         overflow = (rx + menu_width) - settings.WINDOW_SIZE[0]
         
         if (row, col) in build_menu_tiles:
-            build_menu_tiles.remove((row, col))  # close the menu
+            build_menu_tiles.remove((row, col)) # close the menu
+            count_build_menu -= 1
         else:
-            if overflow > 0:
-                offset_x -= 48
-            build_menu_tiles.append((row, col))  # open the menu
+            if count_build_menu == 0:
+                count_build_menu += 1
+                if overflow > 0:
+                    offset_x -= 48
+                build_menu_tiles.append((row, col))  # open the menu
 
 # Main Game Loop
 while running:
