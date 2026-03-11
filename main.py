@@ -202,15 +202,26 @@ def open_build_menu(row, col):
     """
     Toggle black square on the tile at (row, col).
     """
+    global offset_x
+    
     if (TILE_TO_RESOURCE[grid[row][col]] == "wool"):
+        
+        block_size = (settings.TILE_SIZE*zoom)
+        rx = ((col + 1) * settings.TILE_SIZE + offset_x) * zoom
+        menu_width = block_size 
+        
+        overflow = (rx + menu_width) - settings.WINDOW_SIZE[0]
+        
         if (row, col) in build_menu_tiles:
             build_menu_tiles.remove((row, col))  # close the menu
         else:
+            if overflow > 0:
+                offset_x -= 48
             build_menu_tiles.append((row, col))  # open the menu
 
 # Main Game Loop
 while running:
-    screen.fill(settings.DARK_BG)
+    screen.fill(settings.BLACK)
     mx, my = pygame.mouse.get_pos()
     
     # Event Handling
@@ -389,7 +400,8 @@ while running:
         ry = max(0, min(ry, settings.WINDOW_SIZE[1] - (block_size + 1)))
 
         # clamp horizontally to avoid going off the right edge
-        rx = max(0, min(rx, settings.WINDOW_SIZE[0] - (block_size + 1)))
+        # rx = max(0, min(rx, settings.WINDOW_SIZE[0] - (block_size + 1)))
+        
 
         black_rect = pygame.Surface((block_size + 1, block_size + 1))
         black_rect.fill((0, 0, 0))
