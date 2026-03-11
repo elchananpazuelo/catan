@@ -67,6 +67,8 @@ else:
 
 # Mapping between tile IDs and resource names
 TILE_TO_RESOURCE = {
+    "00": "None",
+    "01": "Gray Tile",
     "04": "wool",
     "05": "wood",
     "06": "brick",
@@ -121,6 +123,8 @@ convert_font = pygame.font.Font("fonts/Minecraft.ttf", 47)
 convert_button = convert_font.render("convert", True, "black")
 convert_button_rect = convert_button.get_rect()
 convert_button_rect.center = (768/2, 325)
+
+build_menu_tiles = []  
 
 minus_arr, plus_arr = [], []
 x_test = 33
@@ -193,6 +197,17 @@ xp_menu_opened = False
 counter = 0
 running = True
 
+
+def open_build_menu(row, col):
+    """
+    Toggle black square on the tile at (row, col).
+    """
+    if (TILE_TO_RESOURCE[grid[row][col]] == "wool"):
+        if (row, col) in build_menu_tiles:
+            build_menu_tiles.remove((row, col))  # close the menu
+        else:
+            build_menu_tiles.append((row, col))  # open the menu
+
 # Main Game Loop
 while running:
     screen.fill(settings.DARK_BG)
@@ -244,6 +259,9 @@ while running:
                 # print(settings.FONT_SIZE)
             counter = 0
             dragging = False
+        
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:  # Right click
+            open_build_menu(hover_row, hover_col)
             
         # Camera movement while dragging
         if event.type == pygame.MOUSEMOTION and dragging:
@@ -360,7 +378,23 @@ while running:
             floating_texts.remove(popup)
 
         del popup_font
-            
+    
+    for row, col in build_menu_tiles:
+        block_size = int(settings.TILE_SIZE * zoom)
+        # Default position: right of the tile
+        rx = ((col + 1) * settings.TILE_SIZE + offset_x) * zoom
+        ry = (row * settings.TILE_SIZE + offset_y) * zoom
+        
+        # Clamp so it doesnt go off the screen vertically
+        ry = max(0, min(ry, settings.WINDOW_SIZE[1] - (block_size + 1)))
+
+        # clamp horizontally to avoid going off the right edge
+        rx = max(0, min(rx, settings.WINDOW_SIZE[0] - (block_size + 1)))
+
+        black_rect = pygame.Surface((block_size + 1, block_size + 1))
+        black_rect.fill((0, 0, 0))
+        screen.blit(black_rect, (rx, ry))
+        
     pygame.display.flip()
     clock.tick(settings.FPS)
 
