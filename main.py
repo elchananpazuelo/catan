@@ -67,8 +67,8 @@ else:
 
 # Mapping between tile IDs and resource names
 TILE_TO_RESOURCE = {
-    "00": "None",
-    "01": "Gray Tile",
+    "00": None,
+    "01": None,
     "04": "wool",
     "05": "wood",
     "06": "brick",
@@ -153,15 +153,16 @@ def ChangeGrid(row, col):
     resource_type = grid[row][col]
     if resource_type in TILE_TO_RESOURCE:
         resource_name = TILE_TO_RESOURCE[resource_type]
-        print(resource_name)
-        player.add_resource(resource_name)
-        print(player.resources)
-        floating_texts.append({
-            "text": f"+1 {resource_name}",
-            "row": row,
-            "col": col,
-            "timer": 80
-        })
+        if resource_name != None:
+            print(resource_name)
+            player.add_resource(resource_name)
+            print(player.resources)
+            floating_texts.append({
+                "text": f"+1 {resource_name}",
+                "row": row,
+                "col": col,
+                "timer": 80
+            })
                 
     if grid[row][col] == "01":
         grid[row][col] = "04"
@@ -402,10 +403,10 @@ while running:
         # clamp horizontally to avoid going off the right edge
         # rx = max(0, min(rx, settings.WINDOW_SIZE[0] - (block_size + 1)))
         
-
-        black_rect = pygame.Surface((block_size + 1, block_size + 1))
-        black_rect.fill((0, 0, 0))
-        screen.blit(black_rect, (rx, ry))
+        house_img = pygame.image.load("images/house.png").convert_alpha()
+        
+        scaled_house = pygame.transform.scale(house_img, (block_size + 1, block_size + 1))
+        screen.blit(scaled_house, (rx, ry))
         
     pygame.display.flip()
     clock.tick(settings.FPS)
